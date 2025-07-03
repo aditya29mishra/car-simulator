@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "car sim.sln"
+    "dotnet.defaultSolution": "G929 car simulator.sln"
 }

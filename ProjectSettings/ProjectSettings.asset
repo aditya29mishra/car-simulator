@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: f3c2fa4114c60ee48a585bb628a48784
+  productGUID: e225418aab30f024285d47a13edf30b8
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: car sim
+  productName: G929 car simulator
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -837,14 +837,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: car sim
+  metroPackageName: G929 car simulator
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: car sim
+  metroApplicationDescription: G929 car simulator
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -912,12 +912,12 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 2
+  activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 2ccff5d5-2417-4ce9-ba20-1f70ac170d38
+  cloudProjectId: 20cbff1f-e88c-4cf6-9d36-30124e286dc8
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: car sim
+  projectName: G929 car simulator
   organizationId: adityarakeshmishra
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

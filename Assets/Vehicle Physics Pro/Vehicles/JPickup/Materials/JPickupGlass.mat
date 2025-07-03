@@ -23,6 +23,7 @@ Material:
     RenderType: Transparent
   disabledShaderPasses:
   - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -56,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 97d59d1516bd742c794da94ff353f244, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -137,7 +138,7 @@ Material:
     - _ReflectColor: {r: 0.2794118, g: 0.2794118, b: 0.2794118, a: 0}
     - _SpecColor: {r: 0.4852941, g: 0.4852941, b: 0.4852941, a: 0.73333335}
   m_BuildTextureStacks: []
---- !u!114 &7350544214489419069
+--- !u!114 &8192834813538210149
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
