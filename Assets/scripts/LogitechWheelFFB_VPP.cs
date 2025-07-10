@@ -1,6 +1,6 @@
 using UnityEngine;
 using VehiclePhysics;
-
+using System.Collections;
 namespace Logitech
 {
     [DefaultExecutionOrder(-90)]
@@ -12,14 +12,14 @@ namespace Logitech
         const int WHEEL = 0;
         const int SURFACE_FREQ = 75;
 
-        private bool isInitialized = false;
+        private static bool isInitialized = false;
         private bool isApplicationQuitting = false;
-
-        void Awake()
-        {
-            InitializeSDK();
-        }
-
+IEnumerator Start()
+{
+    yield return null; // Delay by 1 frame
+    InitializeSDK();
+}
+    
         void InitializeSDK()
         {
             if (isInitialized || isApplicationQuitting) return;
@@ -51,43 +51,58 @@ namespace Logitech
             }
         }
 
-        void CleanupSDK()
+       void CleanupSDK()
+{
+    if (isInitialized)
+    {
+        try
         {
-            if (isInitialized && !isApplicationQuitting)
-            {
-                try
-                {
-                    LogitechGSDK.LogiStopSurfaceEffect(WHEEL);
-                    LogitechGSDK.LogiStopConstantForce(WHEEL);
-                    LogitechGSDK.LogiSteeringShutdown();
-                    Debug.Log("[Logitech FFB] SDK shut down.");
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError("[Logitech FFB] SDK shutdown error: " + e.Message);
-                }
-                finally
-                {
-                    isInitialized = false;
-                }
-            }
+            LogitechGSDK.LogiStopSurfaceEffect(WHEEL);
+            LogitechGSDK.LogiStopConstantForce(WHEEL);
+            LogitechGSDK.LogiSteeringShutdown();
+            Debug.Log("[Logitech FFB] SDK shut down.");
         }
+        catch (System.Exception e)
+        {
+            Debug.LogError("[Logitech FFB] SDK shutdown error: " + e.Message);
+        }
+        finally
+        {
+            isInitialized = false;
+        }
+    }
+}
+       #if UNITY_EDITOR || DEVELOPMENT_BUILD
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetStaticData()
+    {
+        isInitialized = false;
+        Debug.Log("[Logitech] Static state reset on domain reload.");
+    }
+#endif
 
-        void Update()
+       void Update()
+{
+    if (isApplicationQuitting) return;
+
+    // Double-check actual SDK state
+    if (!isInitialized || !LogitechGSDK.LogiIsConnected(WHEEL))
+        return;
+
+    try
+    {
+        if (!LogitechGSDK.LogiUpdate())
         {
-            if (isInitialized && !isApplicationQuitting)
-            {
-                try
-                {
-                    LogitechGSDK.LogiUpdate();
-                }
-                catch (System.Exception)
-                {
-                    // Silently handle update errors
-                    isInitialized = false;
-                }
-            }
+            Debug.LogWarning("[Logitech] LogiUpdate failed.");
+            isInitialized = false;
         }
+    }
+    catch (System.Exception e)
+    {
+        Debug.LogError("[Logitech] LogiUpdate crashed: " + e.Message);
+        isInitialized = false;
+    }
+}
 
         void FixedUpdate()
         {
@@ -149,14 +164,5 @@ namespace Logitech
                 }
             }
         }
-
-#if UNITY_EDITOR
-        // Simple editor cleanup that doesn't interfere with domain reload
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void ResetStaticData()
-        {
-            // This runs before domain reload, ensuring clean state
-        }
-#endif
     }
 }

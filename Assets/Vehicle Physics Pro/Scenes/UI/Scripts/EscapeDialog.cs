@@ -85,6 +85,7 @@ public class EscapeDialog : MonoBehaviour
 
 	void OnResetDemo ()
 		{
+		LogitechGSDK.LogiSteeringShutdown();  
 		EdyCommonTools.SceneReload.Reload();
 		}
 

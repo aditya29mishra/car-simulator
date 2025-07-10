@@ -35,6 +35,8 @@ namespace Logitech
             if (clutchWarningClip != null && _audio == null)
                 Debug.LogWarning("Attach an AudioSource to play clutch warning.");
         }
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+       
 
         static float NormaliseCenteredPedal(int raw)
         {
@@ -46,7 +48,7 @@ namespace Logitech
         void Update()
         {
             if (vehicle == null || vehicle.vehicle == null) return;
-            if (!LogitechGSDK.LogiUpdate() || !LogitechGSDK.LogiIsConnected(WHEEL)) return;
+            if (!LogitechGSDK.LogiIsConnected(WHEEL)) return;
 
             var s = LogitechGSDK.LogiGetStateCSharp(WHEEL);
 
@@ -91,7 +93,7 @@ namespace Logitech
                 if (clutch >= clutchThreshold)
                 {
                     // Only reject if jump is too large
-                    if (requestedGear != 0 && Mathf.Abs(requestedGear - lastValidGear) > 1)
+                    if (requestedGear != 0 && Mathf.Abs(requestedGear - lastValidGear) > 1 && !(lastValidGear == -1 && requestedGear == 1) && !(lastValidGear == 1 && requestedGear == -1))
                     {
                         Debug.LogWarning($"[Gear Reject] Abrupt gear change: {lastValidGear} → {requestedGear}");
                         if (clutchWarningClip != null && _audio != null && !_audio.isPlaying)
