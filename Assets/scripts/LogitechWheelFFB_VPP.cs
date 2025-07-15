@@ -14,12 +14,12 @@ namespace Logitech
 
         private static bool isInitialized = false;
         private bool isApplicationQuitting = false;
-IEnumerator Start()
-{
-    yield return null; // Delay by 1 frame
-    InitializeSDK();
-}
-    
+        IEnumerator Start()
+        {
+            yield return null; // Delay by 1 frame
+            InitializeSDK();
+        }
+
         void InitializeSDK()
         {
             if (isInitialized || isApplicationQuitting) return;
@@ -51,58 +51,58 @@ IEnumerator Start()
             }
         }
 
-       void CleanupSDK()
-{
-    if (isInitialized)
-    {
-        try
+        void CleanupSDK()
         {
-            LogitechGSDK.LogiStopSurfaceEffect(WHEEL);
-            LogitechGSDK.LogiStopConstantForce(WHEEL);
-            LogitechGSDK.LogiSteeringShutdown();
-            Debug.Log("[Logitech FFB] SDK shut down.");
+            if (isInitialized)
+            {
+                try
+                {
+                    LogitechGSDK.LogiStopSurfaceEffect(WHEEL);
+                    LogitechGSDK.LogiStopConstantForce(WHEEL);
+                    LogitechGSDK.LogiSteeringShutdown();
+                    Debug.Log("[Logitech FFB] SDK shut down.");
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("[Logitech FFB] SDK shutdown error: " + e.Message);
+                }
+                finally
+                {
+                    isInitialized = false;
+                }
+            }
         }
-        catch (System.Exception e)
-        {
-            Debug.LogError("[Logitech FFB] SDK shutdown error: " + e.Message);
-        }
-        finally
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStaticData()
         {
             isInitialized = false;
+            Debug.Log("[Logitech] Static state reset on domain reload.");
         }
-    }
-}
-       #if UNITY_EDITOR || DEVELOPMENT_BUILD
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void ResetStaticData()
-    {
-        isInitialized = false;
-        Debug.Log("[Logitech] Static state reset on domain reload.");
-    }
 #endif
 
-       void Update()
-{
-    if (isApplicationQuitting) return;
-
-    // Double-check actual SDK state
-    if (!isInitialized || !LogitechGSDK.LogiIsConnected(WHEEL))
-        return;
-
-    try
-    {
-        if (!LogitechGSDK.LogiUpdate())
+        void Update()
         {
-            Debug.LogWarning("[Logitech] LogiUpdate failed.");
-            isInitialized = false;
+            if (isApplicationQuitting) return;
+
+            // Double-check actual SDK state
+            if (!isInitialized || !LogitechGSDK.LogiIsConnected(WHEEL))
+                return;
+
+            try
+            {
+                if (!LogitechGSDK.LogiUpdate())
+                {
+                    Debug.LogWarning("[Logitech] LogiUpdate failed.");
+                    isInitialized = false;
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("[Logitech] LogiUpdate crashed: " + e.Message);
+                isInitialized = false;
+            }
         }
-    }
-    catch (System.Exception e)
-    {
-        Debug.LogError("[Logitech] LogiUpdate crashed: " + e.Message);
-        isInitialized = false;
-    }
-}
 
         void FixedUpdate()
         {

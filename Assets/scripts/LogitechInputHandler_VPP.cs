@@ -36,7 +36,7 @@ namespace Logitech
                 Debug.LogWarning("Attach an AudioSource to play clutch warning.");
         }
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-       
+
 
         static float NormaliseCenteredPedal(int raw)
         {
